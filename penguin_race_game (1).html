@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>펭귄 달리기 시합</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .race-track {
+            position: relative;
+            width: 600px;
+            height: 300px;
+            border: 2px solid #000;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        .penguin {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+        }
+        .name-input {
+            margin: 5px;
+            padding: 5px;
+        }
+        .start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>펭귄 달리기 시합</h1>
+    <div>
+        <label>1번 펭귄: <input type="text" class="name-input" id="name1" placeholder="이름 입력"></label>
+        <label>2번 펭귄: <input type="text" class="name-input" id="name2" placeholder="이름 입력"></label>
+        <label>3번 펭귄: <input type="text" class="name-input" id="name3" placeholder="이름 입력"></label>
+        <label>4번 펭귄: <input type="text" class="name-input" id="name4" placeholder="이름 입력"></label>
+        <label>5번 펭귄: <input type="text" class="name-input" id="name5" placeholder="이름 입력"></label>
+    </div>
+    <button class="start-button" onclick="startRace()">시합 시작!</button>
+    <div class="race-track" id="raceTrack">
+        <img src="/mnt/data/펭귄레이스.png" class="penguin" id="penguin1" style="top: 10px; left: 0px;">
+        <img src="/mnt/data/펭귄레이스.png" class="penguin" id="penguin2" style="top: 60px; left: 0px;">
+        <img src="/mnt/data/펭귄레이스.png" class="penguin" id="penguin3" style="top: 110px; left: 0px;">
+        <img src="/mnt/data/펭귄레이스.png" class="penguin" id="penguin4" style="top: 160px; left: 0px;">
+        <img src="/mnt/data/펭귄레이스.png" class="penguin" id="penguin5" style="top: 210px; left: 0px;">
+    </div>
+    <h2 id="winner"></h2>
+
+    <script>
+        function startRace() {
+            let penguins = [];
+            for (let i = 1; i <= 5; i++) {
+                let name = document.getElementById(`name${i}`).value || `${i}번 펭귄`;
+                penguins.push({ id: `penguin${i}`, name: name, distance: 0 });
+            }
+
+            let raceInterval = setInterval(() => {
+                let finished = false;
+                penguins.forEach(penguin => {
+                    let move = Math.random() * 20;
+                    penguin.distance += move;
+                    document.getElementById(penguin.id).style.left = penguin.distance + 'px';
+                    if (penguin.distance >= 550) {
+                        finished = true;
+                    }
+                });
+
+                if (finished) {
+                    clearInterval(raceInterval);
+                    penguins.sort((a, b) => b.distance - a.distance);
+                    document.getElementById('winner').innerText = `🏆 우승: ${penguins[0].name}!`;
+                }
+            }, 200);
+        }
+    </script>
+</body>
+</html>
